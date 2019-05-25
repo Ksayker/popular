@@ -10,4 +10,8 @@ public interface BaseArticle {
     int TYPE_VIEWED_ARTICLE = 3;
 
     int getType();
+
+    boolean isFavorite();
+
+    void setFavorite(boolean isFavorite);
 }

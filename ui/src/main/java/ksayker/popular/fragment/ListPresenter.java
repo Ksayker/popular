@@ -1,19 +1,19 @@
 package ksayker.popular.fragment;
 
-import android.content.Context;
+import android.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import ksayker.data.repository.ArticleRepositoryImpl;
 import ksayker.domain.entities.Article;
-import ksayker.domain.entities.EmailedArticle;
 import ksayker.domain.interactor.ArticleInteractor;
 import ksayker.popular.R;
 
@@ -23,32 +23,34 @@ import ksayker.popular.R;
  */
 @InjectViewState
 abstract public class ListPresenter extends MvpPresenter<ListView> {
-    // TODO: 24.05.19 remove context
-    private Context context;
     private CompositeDisposable disposables = new CompositeDisposable();
+
+    protected List<Article> articles = Collections.emptyList();
 
     protected ArticleInteractor interactor;
 
-    abstract protected Single<List<Article>> getArticles();
+    protected abstract Single<List<Article>> loadArticles();
 
-    public void init(Context context) {
-        this.context = context;
-        interactor = new ArticleInteractor(new ArticleRepositoryImpl(context));
+    public ListPresenter(ArticleInteractor interactor) {
+        this.interactor = interactor;
     }
 
-    // TODO: 24.05.19 refactor
     public void requestArticle() {
-        disposables.add(getArticles()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe((articles, throwable) -> {
-                    if (throwable == null) {
-                        getViewState().showArticles(articles);
-                    } else {
-                        getViewState().showMessage(true, R.string.title_listFragment_internetError,
-                                R.string.message_listFragment_internetError);
-                    }
-                }));
+        if (articles.isEmpty()) {
+            disposables.add(loadArticles()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe((articles, throwable) -> {
+                        if (throwable == null) {
+                            this.articles = articles;
+
+                            getViewState().showArticles(articles);
+                        } else {
+                            getViewState().showMessage(true, R.string.title_listFragment_internetError,
+                                    R.string.message_listFragment_internetError);
+                        }
+                    }));
+        }
     }
 
     @Override
@@ -72,6 +74,16 @@ abstract public class ListPresenter extends MvpPresenter<ListView> {
         interactor.removeFromFavorite(article)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .subscribe();
+    }
+
+    public void checkFavorite() {
+        Observable.fromIterable(articles)
+                .flatMap(article -> Observable.zip(
+                        Observable.just(article), interactor.checkFavorite(article).toObservable(), Pair::new))
+                .doOnNext(pair -> pair.first.setFavorite(pair.second))
+                .toList()
+                .doAfterSuccess(pairs -> getViewState().notifyDataSetChanged())
                 .subscribe();
     }
 }

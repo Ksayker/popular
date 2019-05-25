@@ -25,4 +25,6 @@ public interface ArticleRepository {
     Completable removeFromFavorite(Article article);
 
     Single<List<Article>> getFavoriteArticles();
+
+    Single<Article> getFavoriteArticle(long articleServerId);
 }

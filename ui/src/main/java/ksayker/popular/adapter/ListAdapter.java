@@ -42,6 +42,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder
 
         viewHolder.tvTitle.setText(article.getTitle());
 
+        viewHolder.cbFavorite.setOnCheckedChangeListener(null);
+        viewHolder.cbFavorite.setChecked(article.isFavorite());
         viewHolder.cbFavorite.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 favoriteListener.addToFavorite(article);

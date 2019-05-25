@@ -12,13 +12,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initView();
-    }
-
-    private void initView() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fl_mainActivity_mainFragmentHolder, TabsFragment.newInstance())
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fl_mainActivity_mainFragmentHolder, TabsFragment.newInstance())
+                    .commit();
+        }
     }
 }

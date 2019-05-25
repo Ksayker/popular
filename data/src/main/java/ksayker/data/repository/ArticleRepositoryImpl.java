@@ -2,6 +2,8 @@ package ksayker.data.repository;
 
 import android.content.Context;
 
+import com.annimon.stream.Stream;
+
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -32,17 +34,23 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
     @Override
     public Single<List<EmailedArticle>> getMostEmailed() {
-        return rest.getMostEmailed();
+        return rest.getMostEmailed()
+                .doOnSuccess(articles -> Stream.of(articles)
+                        .forEach(article -> article.setFavorite(favoriteArticleDao.checkFavorite(article))));
     }
 
     @Override
     public Single<List<SharedArticle>> getMostShared() {
-        return rest.getMostShared();
+        return rest.getMostShared()
+                .doOnSuccess(articles -> Stream.of(articles)
+                        .forEach(article -> article.setFavorite(favoriteArticleDao.checkFavorite(article))));
     }
 
     @Override
     public Single<List<ViewedArticle>> getMostViewed() {
-        return rest.getMostViewed();
+        return rest.getMostViewed()
+                .doOnSuccess(articles -> Stream.of(articles)
+                        .forEach(article -> article.setFavorite(favoriteArticleDao.checkFavorite(article))));
     }
 
     @Override
@@ -57,6 +65,13 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
     @Override
     public Single<List<Article>> getFavoriteArticles() {
-        return Single.fromCallable(() -> favoriteArticleDao.getFavoriteArticles());
+        return Single.fromCallable(() -> favoriteArticleDao.getFavoriteArticles())
+                .doOnSuccess(articles -> Stream.of(articles)
+                        .forEach(article -> article.setFavorite(true)));
+    }
+
+    @Override
+    public Single<Article> getFavoriteArticle(long articleServerId) {
+        return Single.fromCallable(() -> favoriteArticleDao.getFavoriteArticle(articleServerId));
     }
 }

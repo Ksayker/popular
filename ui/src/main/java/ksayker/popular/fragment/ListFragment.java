@@ -19,16 +19,20 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import java.util.Collections;
 import java.util.List;
 
+import ksayker.data.repository.ArticleRepositoryImpl;
 import ksayker.domain.entities.Article;
+import ksayker.domain.interactor.ArticleInteractor;
 import ksayker.popular.R;
 import ksayker.popular.adapter.ListAdapter;
+import ksayker.popular.adapter.TabsPagerAdapter;
 import ksayker.popular.databinding.FragmentListBinding;
 
 /**
  * @author Volchenko Yura
  * @since 24.05.19
  */
-public class ListFragment extends MvpAppCompatFragment implements ListView, ListAdapter.OnAddToFavoriteListener {
+public class ListFragment extends MvpAppCompatFragment implements ListView, ListAdapter.OnAddToFavoriteListener,
+        TabsPagerAdapter.FlippableFragment {
     private static final String MODE_ARG = "MODE_ARG";
     private static final String MODE_MOST_EMAILED = "MODE_MOST_EMAILED";
     private static final String MODE_MOST_SHARED = "MODE_MOST_SHARED";
@@ -69,19 +73,20 @@ public class ListFragment extends MvpAppCompatFragment implements ListView, List
         ListPresenter presenter;
         String mode = args.getString(MODE_ARG);
 
+        ArticleInteractor interactor = new ArticleInteractor(new ArticleRepositoryImpl(getContext()));
         switch (mode) {
             default:
             case MODE_MOST_EMAILED:
-                presenter = new MostEmailedPresenter();
+                presenter = new MostEmailedPresenter(interactor);
                 break;
             case MODE_MOST_SHARED:
-                presenter = new MostSharedPresenter();
+                presenter = new MostSharedPresenter(interactor);
                 break;
             case MODE_MOST_VIEWED:
-                presenter = new MostViewedPresenter();
+                presenter = new MostViewedPresenter(interactor);
                 break;
             case MODE_FAVORITE:
-                presenter = new FavoritePresenter();
+                presenter = new FavoritePresenter(interactor);
                 break;
         }
 
@@ -96,13 +101,6 @@ public class ListFragment extends MvpAppCompatFragment implements ListView, List
         initView(binding);
 
         return binding.getRoot();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        presenter.init(getContext());
-        presenter.requestArticle();
     }
 
     @Override
@@ -125,17 +123,19 @@ public class ListFragment extends MvpAppCompatFragment implements ListView, List
 
     @Override
     public void showMessage(boolean show, @StringRes int titleId, @StringRes int messageId) {
-        if (show) {
-            errorDialog = new AlertDialog.Builder(getContext())
-                    .setTitle(titleId)
-                    .setMessage(messageId)
-                    .setPositiveButton(R.string.all_ok, (dialog, which) -> dialog.dismiss())
-                    .setOnDismissListener(dialog -> presenter.hideMessage())
-                    .show();
-        } else {
-            if (errorDialog != null) {
-                errorDialog.dismiss();
-                errorDialog = null;
+        if (isVisible()) {
+            if (show) {
+                errorDialog = new AlertDialog.Builder(getContext())
+                        .setTitle(titleId)
+                        .setMessage(messageId)
+                        .setPositiveButton(R.string.all_ok, (dialog, which) -> dialog.dismiss())
+                        .setOnDismissListener(dialog -> presenter.hideMessage())
+                        .show();
+            } else {
+                if (errorDialog != null) {
+                    errorDialog.dismiss();
+                    errorDialog = null;
+                }
             }
         }
     }
@@ -146,6 +146,11 @@ public class ListFragment extends MvpAppCompatFragment implements ListView, List
     }
 
     @Override
+    public void notifyDataSetChanged() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void addToFavorite(Article article) {
         presenter.addToFavorite(article);
     }
@@ -153,6 +158,16 @@ public class ListFragment extends MvpAppCompatFragment implements ListView, List
     @Override
     public void removeFromFavorite(Article article) {
         presenter.removeFromFavorite(article);
+    }
+
+    @Override
+    public void onPageFlipTo() {
+        presenter.checkFavorite();
+        presenter.requestArticle();
+    }
+
+    @Override
+    public void onPageFlipFrom() {
     }
 
     public enum Mode {

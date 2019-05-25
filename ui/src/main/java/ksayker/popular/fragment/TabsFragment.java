@@ -2,12 +2,14 @@ package ksayker.popular.fragment;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,5 +53,18 @@ public class TabsFragment extends Fragment {
 
         viewPager.setAdapter(pagerAdapter);
         tlTabs.setupWithViewPager(viewPager);
+
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+//                presenter.onPageSelected(position);
+                System.out.println(position);
+            }
+        });
+
+        new Handler().postDelayed(() -> {
+            Log.d("ASD", "" + fragmentBinding.vpMainActivityPager.getCurrentItem());
+        }, 2000);
+
     }
 }

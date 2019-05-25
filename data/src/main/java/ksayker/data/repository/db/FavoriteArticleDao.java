@@ -66,7 +66,7 @@ public class FavoriteArticleDao {
         SQLiteDatabase database = db.getWritableDatabase();
         ContentValues cv = articleToCv(article);
 
-        if (database.update(TableFavoriteArticle.TABLE_NAME, cv, TableFavoriteArticle.SERVER_ID + "=" + article.getServerId(), null) != 1) {
+        if (database.update(TableFavoriteArticle.TABLE_NAME, cv, TableFavoriteArticle.SERVER_ID + "='" + article.getServerId() + "'", null) != 1) {
             database.insert(TableFavoriteArticle.TABLE_NAME, null, cv);
         }
     }
@@ -74,7 +74,7 @@ public class FavoriteArticleDao {
     public void removeFromFavorite(Article article) {
         SQLiteDatabase database = db.getWritableDatabase();
 
-        database.delete(TableFavoriteArticle.TABLE_NAME, TableFavoriteArticle.SERVER_ID + "=" + article.getServerId(), null);
+        database.delete(TableFavoriteArticle.TABLE_NAME, TableFavoriteArticle.SERVER_ID + "='" + article.getServerId() + "'", null);
     }
 
     public List<Article> getFavoriteArticles() {
@@ -89,5 +89,30 @@ public class FavoriteArticleDao {
         cursor.close();
 
         return articles;
+    }
+
+    public boolean checkFavorite(Article article) {
+        boolean result;
+        SQLiteDatabase database = db.getReadableDatabase();
+        String where = TableFavoriteArticle.SERVER_ID + "='" + article.getServerId() + "'";
+        Cursor cursor = database.query(TableFavoriteArticle.TABLE_NAME, null, where, null, null, null, null);
+
+        result = cursor.moveToFirst();
+        cursor.close();
+
+        return result;
+    }
+
+    public Article getFavoriteArticle(long articleServerId) {
+        SQLiteDatabase database = db.getReadableDatabase();
+        String where = TableFavoriteArticle.SERVER_ID + "='" + articleServerId + "'";
+        Cursor cursor = database.query(TableFavoriteArticle.TABLE_NAME, null, where, null, null, null, null);
+        Article article = Article.NONE;
+        if (cursor.moveToFirst()) {
+            article = cursorToArticle(cursor);
+        }
+        cursor.close();
+
+        return article;
     }
 }

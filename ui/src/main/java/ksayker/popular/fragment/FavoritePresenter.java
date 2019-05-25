@@ -6,6 +6,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 import ksayker.domain.entities.Article;
+import ksayker.domain.interactor.ArticleInteractor;
 
 /**
  * @author Volchenko Yura
@@ -13,8 +14,18 @@ import ksayker.domain.entities.Article;
  */
 @InjectViewState
 public class FavoritePresenter extends ListPresenter {
+    public FavoritePresenter(ArticleInteractor interactor) {
+        super(interactor);
+    }
+
     @Override
-    protected Single<List<Article>> getArticles() {
+    protected Single<List<Article>> loadArticles() {
         return (Single<List<Article>>)(Single<?>) interactor.getFavoriteArticles();
+    }
+
+    @Override
+    public void requestArticle() {
+        articles.clear();
+        super.requestArticle();
     }
 }

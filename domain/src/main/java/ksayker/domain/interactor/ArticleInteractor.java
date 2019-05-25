@@ -44,4 +44,9 @@ public class ArticleInteractor {
     public Single<List<Article>> getFavoriteArticles() {
         return repository.getFavoriteArticles();
     }
+
+    public Single<Boolean> checkFavorite(Article article) {
+        return repository.getFavoriteArticle(article.getServerId())
+                .map(article1 -> article1 != Article.NONE);
+    }
 }
