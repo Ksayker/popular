@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ksayker.domain.entities.Article;
 import ksayker.popular.R;
 
 /**
@@ -18,9 +19,9 @@ import ksayker.popular.R;
  */
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder> {
     private Context context;
-    private List<String> items;
+    private List<Article> items;
 
-    public ListAdapter(Context context, List<String> items) {
+    public ListAdapter(Context context, List<Article> items) {
         this.context = context;
         this.items = items;
     }
@@ -34,12 +35,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder viewHolder, int i) {
-        viewHolder.textView.setText(items.get(i));
+        viewHolder.textView.setText(items.get(i).getTitle());
     }
 
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public void setItems(List<Article> articles) {
+        items = articles;
+        notifyDataSetChanged();
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {

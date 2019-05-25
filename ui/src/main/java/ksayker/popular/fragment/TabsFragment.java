@@ -31,12 +31,12 @@ public class TabsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentTabsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tabs, container, false);
 
-        initView(binding, inflater);
+        initView(binding);
 
         return binding.getRoot();
     }
 
-    private void initView(FragmentTabsBinding fragmentBinding, LayoutInflater inflater) {
+    private void initView(FragmentTabsBinding fragmentBinding) {
         fragmentBinding.tbMainActivityToolbar.setTitle(R.string.app_name);
         fragmentBinding.tbMainActivityToolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.mainActivity_title));
 
@@ -45,17 +45,10 @@ public class TabsFragment extends Fragment {
 
         TabsPagerAdapter pagerAdapter = new TabsPagerAdapter(getChildFragmentManager());
         pagerAdapter.addFragment(ListFragment.newInstance(), getString(R.string.title_mainFragment_mostEmailed));
-        pagerAdapter.addFragment(ListFragment.newInstance(), getString(R.string.title_mainFragment_mostShared));
-        pagerAdapter.addFragment(ListFragment.newInstance(), getString(R.string.title_mainFragment_mostViewed));
+//        pagerAdapter.addFragment(ListFragment.newInstance(), getString(R.string.title_mainFragment_mostShared));
+//        pagerAdapter.addFragment(ListFragment.newInstance(), getString(R.string.title_mainFragment_mostViewed));
 
         viewPager.setAdapter(pagerAdapter);
-
         tlTabs.setupWithViewPager(viewPager);
-        for (int i = 0; i < tlTabs.getTabCount(); i++) {
-//            TabLayout.Tab tab = tlTabs.getTabAt(i);
-//            TabBinding binding = DataBindingUtil.inflate(inflater, R.layout.tab, tlTabs, false);
-//            binding.textView.setText(pagerAdapter.getPageTitle(i));
-//            tab.setCustomView(binding.getRoot());
-        }
     }
 }
