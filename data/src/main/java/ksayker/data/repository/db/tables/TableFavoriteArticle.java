@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
  * @author Volchenko Yura
  * @since 25.05.19
  */
-public class TableArticle {
-    public static final String TABLE_NAME = "article";
+public class TableFavoriteArticle {
+    public static final String TABLE_NAME = "favorite_article";
 
     public static final String ID = "id_";
     public static final String SERVER_ID = "id";
@@ -20,10 +20,10 @@ public class TableArticle {
                 + TABLE_NAME
                 + "("
                 + ID + " integer primary key autoincrement, "
-                + SERVER_ID + " integer,"
+                + SERVER_ID + " text,"
                 + TITLE + " text,"
                 + URL + " text,"
-                + TYPE + " text"
+                + TYPE + " integer"
                 + ");");
     }
 }

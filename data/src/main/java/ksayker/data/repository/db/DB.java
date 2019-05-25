@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
-import ksayker.data.repository.db.tables.TableArticle;
+import ksayker.data.repository.db.tables.TableFavoriteArticle;
 
 /**
  * @author Volchenko Yura
@@ -15,16 +15,16 @@ public class DB extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MostPopular";
     private static final int DATABASE_VERSION = 1;
 
-    private TableArticle tableArticle;
+    private TableFavoriteArticle tableFavoriteArticle;
 
     public DB(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        tableArticle = new TableArticle();
+        tableFavoriteArticle = new TableFavoriteArticle();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        tableArticle.createTable(db);
+        tableFavoriteArticle.createTable(db);
     }
 
     @Override

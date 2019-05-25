@@ -47,6 +47,7 @@ public class TabsFragment extends Fragment {
         pagerAdapter.addFragment(ListFragment.newInstance(ListFragment.Mode.MODE_MOST_EMAILED), getString(R.string.title_mainFragment_mostEmailed));
         pagerAdapter.addFragment(ListFragment.newInstance(ListFragment.Mode.MODE_MOST_SHARED), getString(R.string.title_mainFragment_mostShared));
         pagerAdapter.addFragment(ListFragment.newInstance(ListFragment.Mode.MODE_MOST_VIEWED), getString(R.string.title_mainFragment_mostViewed));
+        pagerAdapter.addFragment(ListFragment.newInstance(ListFragment.Mode.MODE_FAVORITE), getString(R.string.title_mainFragment_favorite));
 
         viewPager.setAdapter(pagerAdapter);
         tlTabs.setupWithViewPager(viewPager);

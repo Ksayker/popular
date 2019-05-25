@@ -40,4 +40,8 @@ public class ArticleInteractor {
     public Completable removeFromFavorite(Article article) {
         return repository.removeFromFavorite(article);
     }
+
+    public Single<List<Article>> getFavoriteArticles() {
+        return repository.getFavoriteArticles();
+    }
 }

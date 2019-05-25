@@ -33,6 +33,7 @@ public class ListFragment extends MvpAppCompatFragment implements ListView, List
     private static final String MODE_MOST_EMAILED = "MODE_MOST_EMAILED";
     private static final String MODE_MOST_SHARED = "MODE_MOST_SHARED";
     private static final String MODE_MOST_VIEWED = "MODE_MOST_VIEWED";
+    private static final String MODE_FAVORITE = "MODE_FAVORITE";
 
 
     @InjectPresenter
@@ -53,6 +54,8 @@ public class ListFragment extends MvpAppCompatFragment implements ListView, List
             args.putString(MODE_ARG, MODE_MOST_SHARED);
         } else if (mode == Mode.MODE_MOST_VIEWED) {
             args.putString(MODE_ARG, MODE_MOST_VIEWED);
+        } else if (mode == Mode.MODE_FAVORITE) {
+            args.putString(MODE_ARG, MODE_FAVORITE);
         } else {
             args.putString(MODE_ARG, MODE_MOST_EMAILED);
         }
@@ -76,6 +79,9 @@ public class ListFragment extends MvpAppCompatFragment implements ListView, List
                 break;
             case MODE_MOST_VIEWED:
                 presenter = new MostViewedPresenter();
+                break;
+            case MODE_FAVORITE:
+                presenter = new FavoritePresenter();
                 break;
         }
 
@@ -152,6 +158,7 @@ public class ListFragment extends MvpAppCompatFragment implements ListView, List
     public enum Mode {
         MODE_MOST_EMAILED,
         MODE_MOST_SHARED,
-        MODE_MOST_VIEWED
+        MODE_MOST_VIEWED,
+        MODE_FAVORITE
     }
 }

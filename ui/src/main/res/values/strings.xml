@@ -6,6 +6,7 @@
     <string name="title_mainFragment_mostEmailed">most emailed</string>
     <string name="title_mainFragment_mostShared">most shared</string>
     <string name="title_mainFragment_mostViewed">most viewed</string>
+    <string name="title_mainFragment_favorite">favorite</string>
 
     <string name="title_listFragment_internetError">error</string>
     <string name="message_listFragment_internetError">check network</string>

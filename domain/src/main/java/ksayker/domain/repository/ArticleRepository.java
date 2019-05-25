@@ -23,4 +23,6 @@ public interface ArticleRepository {
     Completable addToFavorite(Article article);
 
     Completable removeFromFavorite(Article article);
+
+    Single<List<Article>> getFavoriteArticles();
 }

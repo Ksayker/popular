@@ -6,7 +6,7 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import ksayker.data.repository.db.ArticleDao;
+import ksayker.data.repository.db.FavoriteArticleDao;
 import ksayker.data.repository.db.DB;
 import ksayker.data.repository.rest.Rest;
 import ksayker.domain.entities.Article;
@@ -22,12 +22,12 @@ import ksayker.domain.repository.ArticleRepository;
 public class ArticleRepositoryImpl implements ArticleRepository {
     private Context appContext;
     private Rest rest;
-    private ArticleDao articleDao;
+    private FavoriteArticleDao favoriteArticleDao;
 
     public ArticleRepositoryImpl(Context context) {
         appContext = context.getApplicationContext();
         rest = new Rest();
-        articleDao = new ArticleDao(new DB(appContext));
+        favoriteArticleDao = new FavoriteArticleDao(new DB(appContext));
     }
 
     @Override
@@ -47,11 +47,16 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 
     @Override
     public Completable addToFavorite(Article article) {
-        return Completable.fromAction(() -> articleDao.addToFavorite(article));
+        return Completable.fromAction(() -> favoriteArticleDao.addToFavorite(article));
     }
 
     @Override
     public Completable removeFromFavorite(Article article) {
-        return Completable.fromAction(() -> articleDao.removeFromFavorite(article));
+        return Completable.fromAction(() -> favoriteArticleDao.removeFromFavorite(article));
+    }
+
+    @Override
+    public Single<List<Article>> getFavoriteArticles() {
+        return Single.fromCallable(() -> favoriteArticleDao.getFavoriteArticles());
     }
 }
