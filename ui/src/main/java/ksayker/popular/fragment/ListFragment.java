@@ -11,13 +11,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +28,7 @@ import ksayker.popular.databinding.FragmentListBinding;
  * @author Volchenko Yura
  * @since 24.05.19
  */
-public class ListFragment extends MvpAppCompatFragment implements ListView {
+public class ListFragment extends MvpAppCompatFragment implements ListView, ListAdapter.OnAddToFavoriteListener {
     private static final String MODE_ARG = "MODE_ARG";
     private static final String MODE_MOST_EMAILED = "MODE_MOST_EMAILED";
     private static final String MODE_MOST_SHARED = "MODE_MOST_SHARED";
@@ -114,7 +112,7 @@ public class ListFragment extends MvpAppCompatFragment implements ListView {
     private void initView(FragmentListBinding binding) {
         binding.rvListFragmentList.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new ListAdapter(getContext(), Collections.emptyList());
+        adapter = new ListAdapter(getContext(), Collections.emptyList(), this);
 
         binding.rvListFragmentList.setAdapter(adapter);
     }
@@ -139,6 +137,16 @@ public class ListFragment extends MvpAppCompatFragment implements ListView {
     @Override
     public void showArticles(List<Article> articles) {
         adapter.setItems(articles);
+    }
+
+    @Override
+    public void addToFavorite(Article article) {
+        presenter.addToFavorite(article);
+    }
+
+    @Override
+    public void removeFromFavorite(Article article) {
+        presenter.removeFromFavorite(article);
     }
 
     public enum Mode {

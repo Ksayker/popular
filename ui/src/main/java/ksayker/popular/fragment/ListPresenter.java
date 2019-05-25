@@ -60,4 +60,18 @@ abstract public class ListPresenter extends MvpPresenter<ListView> {
     public void hideMessage() {
         getViewState().showMessage(false, 0, 0);
     }
+
+    public void addToFavorite(Article article) {
+        interactor.addToFavorite(article)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe();
+    }
+
+    public void removeFromFavorite(Article article) {
+        interactor.removeFromFavorite(article)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe();
+    }
 }

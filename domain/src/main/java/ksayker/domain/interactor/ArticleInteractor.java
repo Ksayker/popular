@@ -2,7 +2,9 @@ package ksayker.domain.interactor;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
+import ksayker.domain.entities.Article;
 import ksayker.domain.entities.EmailedArticle;
 import ksayker.domain.entities.SharedArticle;
 import ksayker.domain.entities.ViewedArticle;
@@ -29,5 +31,13 @@ public class ArticleInteractor {
 
     public Single<List<ViewedArticle>> getMostViewedArticles() {
         return repository.getMostViewed();
+    }
+
+    public Completable addToFavorite(Article article) {
+        return repository.addToFavorite(article);
+    }
+
+    public Completable removeFromFavorite(Article article) {
+        return repository.removeFromFavorite(article);
     }
 }

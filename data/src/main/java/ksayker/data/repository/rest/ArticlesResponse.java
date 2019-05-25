@@ -1,4 +1,4 @@
-package ksayker.data.repository;
+package ksayker.data.repository.rest;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

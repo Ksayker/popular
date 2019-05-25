@@ -19,4 +19,9 @@ public class EmailedArticle extends Article {
     public void setEmailCount(int emailCount) {
         this.emailCount = emailCount;
     }
+
+    @Override
+    public int getType() {
+        return TYPE_EMAILED_ARTICLE;
+    }
 }

@@ -1,5 +1,6 @@
 package ksayker.data.repository;
 
+import ksayker.data.repository.rest.ArticlesResponse;
 import ksayker.domain.entities.EmailedArticle;
 import ksayker.domain.entities.SharedArticle;
 import ksayker.domain.entities.ViewedArticle;

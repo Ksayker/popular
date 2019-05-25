@@ -19,4 +19,9 @@ public class SharedArticle extends Article {
     public void setShareCount(int shareCount) {
         this.shareCount = shareCount;
     }
+
+    @Override
+    public int getType() {
+        return TYPE_SHARED_ARTICLE;
+    }
 }

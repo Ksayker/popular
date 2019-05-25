@@ -7,10 +7,10 @@ import com.google.gson.annotations.SerializedName;
  * @author Volchenko Yura
  * @since 24.05.19
  */
-public class Article {
+public abstract class Article implements BaseArticle {
     @SerializedName("id")
     @Expose
-    private long id;
+    private long serverId;
     @SerializedName("url")
     @Expose
     private String url;
@@ -26,12 +26,12 @@ public class Article {
         return title;
     }
 
-    public long getId() {
-        return id;
+    public long getServerId() {
+        return serverId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setServerId(long id) {
+        this.serverId = id;
     }
 
     public String getUrl() {

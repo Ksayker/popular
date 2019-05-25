@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
@@ -20,10 +21,12 @@ import ksayker.popular.R;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder> {
     private Context context;
     private List<Article> items;
+    private OnAddToFavoriteListener favoriteListener;
 
-    public ListAdapter(Context context, List<Article> items) {
+    public ListAdapter(Context context, List<Article> items, OnAddToFavoriteListener favoriteListener) {
         this.context = context;
         this.items = items;
+        this.favoriteListener = favoriteListener;
     }
 
     @NonNull
@@ -35,7 +38,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder viewHolder, int i) {
-        viewHolder.textView.setText(items.get(i).getTitle());
+        Article article = items.get(i);
+
+        viewHolder.tvTitle.setText(article.getTitle());
+
+        viewHolder.cbFavorite.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                favoriteListener.addToFavorite(article);
+            } else {
+                favoriteListener.removeFromFavorite(article);
+            }
+        });
     }
 
     @Override
@@ -49,11 +62,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView tvTitle;
+        CheckBox cbFavorite;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.tv_item_text);
+            tvTitle = itemView.findViewById(R.id.tv_item_text);
+            cbFavorite = itemView.findViewById(R.id.cb_item_favorite);
         }
+    }
+
+    public interface OnAddToFavoriteListener {
+        void addToFavorite(Article article);
+        void removeFromFavorite(Article article);
     }
 }

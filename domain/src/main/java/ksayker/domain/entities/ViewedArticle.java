@@ -19,4 +19,9 @@ public class ViewedArticle extends Article {
     public void setViewsCount(int viewsCount) {
         this.viewsCount = viewsCount;
     }
+
+    @Override
+    public int getType() {
+        return TYPE_VIEWED_ARTICLE;
+    }
 }
