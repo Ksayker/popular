@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +31,11 @@ import ksayker.popular.databinding.FragmentListBinding;
  * @since 24.05.19
  */
 public class ListFragment extends MvpAppCompatFragment implements ListView {
+    private static final String MODE_ARG = "MODE_ARG";
+    private static final String MODE_MOST_EMAILED = "MODE_MOST_EMAILED";
+    private static final String MODE_MOST_SHARED = "MODE_MOST_SHARED";
+    private static final String MODE_MOST_VIEWED = "MODE_MOST_VIEWED";
+
 
     @InjectPresenter
     ListPresenter presenter;
@@ -38,8 +44,44 @@ public class ListFragment extends MvpAppCompatFragment implements ListView {
 
     private Dialog errorDialog;
 
-    public static ListFragment newInstance() {
-        return new ListFragment();
+    public static ListFragment newInstance(Mode mode) {
+        Bundle args = new Bundle();
+        ListFragment fragment = new ListFragment();
+        fragment.setArguments(args);
+
+        if (mode == Mode.MODE_MOST_EMAILED) {
+            args.putString(MODE_ARG, MODE_MOST_EMAILED);
+        } else if (mode == Mode.MODE_MOST_SHARED) {
+            args.putString(MODE_ARG, MODE_MOST_SHARED);
+        } else if (mode == Mode.MODE_MOST_VIEWED) {
+            args.putString(MODE_ARG, MODE_MOST_VIEWED);
+        } else {
+            args.putString(MODE_ARG, MODE_MOST_EMAILED);
+        }
+
+        return fragment;
+    }
+
+    @ProvidePresenter
+    ListPresenter provideListPresenter() {
+        Bundle args = getArguments();
+        ListPresenter presenter;
+        String mode = args.getString(MODE_ARG);
+
+        switch (mode) {
+            default:
+            case MODE_MOST_EMAILED:
+                presenter = new MostEmailedPresenter();
+                break;
+            case MODE_MOST_SHARED:
+                presenter = new MostSharedPresenter();
+                break;
+            case MODE_MOST_VIEWED:
+                presenter = new MostViewedPresenter();
+                break;
+        }
+
+        return presenter;
     }
 
     @Nullable
@@ -97,5 +139,11 @@ public class ListFragment extends MvpAppCompatFragment implements ListView {
     @Override
     public void showArticles(List<Article> articles) {
         adapter.setItems(articles);
+    }
+
+    public enum Mode {
+        MODE_MOST_EMAILED,
+        MODE_MOST_SHARED,
+        MODE_MOST_VIEWED
     }
 }

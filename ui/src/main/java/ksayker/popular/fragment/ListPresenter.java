@@ -5,10 +5,15 @@ import android.content.Context;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.List;
+
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import ksayker.data.repository.ArticleRepositoryImpl;
+import ksayker.domain.entities.Article;
+import ksayker.domain.entities.EmailedArticle;
 import ksayker.domain.interactor.ArticleInteractor;
 import ksayker.popular.R;
 
@@ -17,14 +22,14 @@ import ksayker.popular.R;
  * @since 24.05.19
  */
 @InjectViewState
-public class ListPresenter extends MvpPresenter<ListView> {
+abstract public class ListPresenter extends MvpPresenter<ListView> {
     // TODO: 24.05.19 remove context
     private Context context;
     private CompositeDisposable disposables = new CompositeDisposable();
 
-    private ArticleInteractor interactor;
+    protected ArticleInteractor interactor;
 
-
+    abstract protected Single<List<Article>> getArticles();
 
     public void init(Context context) {
         this.context = context;
@@ -33,7 +38,7 @@ public class ListPresenter extends MvpPresenter<ListView> {
 
     // TODO: 24.05.19 refactor
     public void requestArticle() {
-        disposables.add(interactor.getMostEmailed()
+        disposables.add(getArticles()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe((articles, throwable) -> {

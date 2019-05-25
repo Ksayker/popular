@@ -3,7 +3,9 @@ package ksayker.domain.interactor;
 import java.util.List;
 
 import io.reactivex.Single;
-import ksayker.domain.entities.Article;
+import ksayker.domain.entities.EmailedArticle;
+import ksayker.domain.entities.SharedArticle;
+import ksayker.domain.entities.ViewedArticle;
 import ksayker.domain.repository.ArticleRepository;
 
 /**
@@ -17,7 +19,15 @@ public class ArticleInteractor {
         this.repository = repository;
     }
 
-    public Single<List<Article>> getMostEmailed() {
+    public Single<List<EmailedArticle>> getMostEmailedArticles() {
         return repository.getMostEmailed();
+    }
+
+    public Single<List<SharedArticle>> getMostSharedArticles() {
+        return repository.getMostShared();
+    }
+
+    public Single<List<ViewedArticle>> getMostViewedArticles() {
+        return repository.getMostViewed();
     }
 }
