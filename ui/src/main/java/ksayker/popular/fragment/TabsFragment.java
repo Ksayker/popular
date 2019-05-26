@@ -39,8 +39,8 @@ public class TabsFragment extends Fragment {
     }
 
     private void initView(FragmentTabsBinding fragmentBinding) {
-        fragmentBinding.tbMainActivityToolbar.setTitle(R.string.app_name);
-        fragmentBinding.tbMainActivityToolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.mainActivity_title));
+        fragmentBinding.tbTabsFragmentToolbar.setTitle(R.string.app_name);
+        fragmentBinding.tbTabsFragmentToolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.mainActivity_title));
 
         ViewPager viewPager = fragmentBinding.vpMainActivityPager;
         TabLayout tlTabs = fragmentBinding.tlMainActivityTabs;

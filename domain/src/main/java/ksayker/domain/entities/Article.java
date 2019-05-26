@@ -3,11 +3,13 @@ package ksayker.domain.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * @author Volchenko Yura
  * @since 24.05.19
  */
-public abstract class Article implements BaseArticle {
+public abstract class Article implements BaseArticle, Serializable {
     public static Article NONE = new Article() {
         @Override
         public int getType() {

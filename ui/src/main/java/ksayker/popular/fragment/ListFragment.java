@@ -31,7 +31,7 @@ import ksayker.popular.databinding.FragmentListBinding;
  * @author Volchenko Yura
  * @since 24.05.19
  */
-public class ListFragment extends MvpAppCompatFragment implements ListView, ListAdapter.OnAddToFavoriteListener,
+public class ListFragment extends MvpAppCompatFragment implements ListView, ListAdapter.AddToFavoriteListener,
         TabsPagerAdapter.FlippableFragment {
     private static final String MODE_ARG = "MODE_ARG";
     private static final String MODE_MOST_EMAILED = "MODE_MOST_EMAILED";
@@ -116,7 +116,7 @@ public class ListFragment extends MvpAppCompatFragment implements ListView, List
     private void initView(FragmentListBinding binding) {
         binding.rvListFragmentList.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new ListAdapter(getContext(), Collections.emptyList(), this);
+        adapter = new ListAdapter(getContext(), Collections.emptyList(), this, (ListAdapter.ArticleClickListener) getActivity());
 
         binding.rvListFragmentList.setAdapter(adapter);
     }

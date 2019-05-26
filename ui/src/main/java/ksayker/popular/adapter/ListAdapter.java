@@ -21,12 +21,16 @@ import ksayker.popular.R;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder> {
     private Context context;
     private List<Article> items;
-    private OnAddToFavoriteListener favoriteListener;
 
-    public ListAdapter(Context context, List<Article> items, OnAddToFavoriteListener favoriteListener) {
+    private AddToFavoriteListener favoriteListener;
+    private ArticleClickListener articleClickListener;
+
+    public ListAdapter(Context context, List<Article> items, AddToFavoriteListener favoriteListener,
+                       ArticleClickListener articleClickListener) {
         this.context = context;
         this.items = items;
         this.favoriteListener = favoriteListener;
+        this.articleClickListener = articleClickListener;
     }
 
     @NonNull
@@ -51,6 +55,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder
                 favoriteListener.removeFromFavorite(article);
             }
         });
+
+        viewHolder.root.setOnClickListener(v -> articleClickListener.onArticleClick(article));
     }
 
     @Override
@@ -64,18 +70,24 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ItemViewHolder
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
+        View root;
         TextView tvTitle;
         CheckBox cbFavorite;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
+            root = itemView;
             tvTitle = itemView.findViewById(R.id.tv_item_text);
             cbFavorite = itemView.findViewById(R.id.cb_item_favorite);
         }
     }
 
-    public interface OnAddToFavoriteListener {
+    public interface AddToFavoriteListener {
         void addToFavorite(Article article);
         void removeFromFavorite(Article article);
+    }
+
+    public interface ArticleClickListener {
+        void onArticleClick(Article article);
     }
 }
